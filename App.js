@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+
+//import components
+import { GoalItem } from './components/GoalItem';
 
 export default function App() {
 
@@ -23,7 +26,7 @@ export default function App() {
 
     } else {
       setTextError("Cannot add an empty goal!");
-      const errorMessageTimeOut = setTimeout(() => {
+      setTimeout(() => {
         setTextError("");
       }, 3000)
     }
@@ -54,13 +57,9 @@ export default function App() {
       {/*FlatList needs data and renderItem props */}
         <FlatList 
           data={goalsList} 
-          renderItem={(itemData) => { //callback function passed to renderItem automatically receives an object as an input
+          renderItem={(itemData) => { //callback function passed to renderItem automatically receives an object as an input-- each object contains metadata & represents each element in goalsList array
           return (
-            <View>
-            {/* property `item` on itemData represents each element in the goalsList array */}
-            {/* `text` property on itemData.item.text is pulling the text property off of each element stored in the array */}
-              <Text style={styles.goalItem}>{itemData.item.text}</Text> 
-            </View>
+            <GoalItem goalItemData={itemData}></GoalItem> //property `item` on object contains our actual array element
           )
         }}
         //FlatList requires a key, similar to when we map through array elements
@@ -113,16 +112,5 @@ const styles = StyleSheet.create({
   goalsContainer: {
     flex: 8,
   },
-
-  goalItem: {
-    backgroundColor: "#7627f5",
-    color: "#ffffff",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    width: "90%",
-
-  },
-
 
 });
