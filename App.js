@@ -4,43 +4,19 @@ import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-nativ
 
 //import components
 import { GoalItem } from './components/GoalItem';
+import { GoalInput } from './components/GoalInput';
 
 export default function App() {
 
-  const [textInput, setTextInput] = useState("");
   const [textError, setTextError] = useState("");
   const [goalsList, setGoalsList] = useState([]); // to be a list of objects
-
-  const handleInputChange = (enteredText) => {
-    // console.log(enteredText);
-    setTextInput(enteredText);
-  };
-
-  const handlePress = () => {
-    if(textInput.length > 0){
-      // setGoalsList([...goalsList, textInput]); // this works...
-      // but, recommended way of updating state if state updates depend on the previous state -- pass a callback function that automatically receives the existing state as an input
-      setGoalsList((currentGoals) => [...currentGoals, {text: textInput, id: Math.random().toString()}]);
-      setTextInput("");
-      setTextError("");
-
-    } else {
-      setTextError("Cannot add an empty goal!");
-      setTimeout(() => {
-        setTextError("");
-      }, 3000)
-    }
-  };
 
   return (
     // main view
     <View style={styles.appContainer}>
       {/* view / div that holds the input and button */}
       <View style={styles.inputView}>
-        <View style={styles.inputContainer}>
-          <TextInput value={textInput} style={styles.textInput} placeholder="Your course goal!" onChangeText={handleInputChange}></TextInput>
-          <Button title="Add Goal" onPress={handlePress}></Button>
-        </View>
+        <GoalInput setTextError={setTextError} setGoalsList={setGoalsList}></GoalInput>
 
         {
           textError && (
@@ -49,6 +25,7 @@ export default function App() {
             </View>
           )
         }
+        
       </View>
 
       {/* view / div that holds the list of goals */}
@@ -88,20 +65,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc"
-  },
-
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
-    width: "70%",
-    marginRight: 8,
-    padding: 8,
-    backgroundColor: "#ffffff",
   },
 
   textError: {
