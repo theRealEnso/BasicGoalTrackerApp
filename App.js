@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 
 export default function App() {
 
   const [textInput, setTextInput] = useState("");
+  const [textError, setTextError] = useState("");
   const [goalsList, setGoalsList] = useState([]); // to be a list of objects
 
   const handleInputChange = (enteredText) => {
@@ -13,19 +14,38 @@ export default function App() {
   };
 
   const handlePress = () => {
-    // setGoalsList([...goalsList, textInput]); // this works...
-    // but, recommended way of updating state if state updates depend on the previous state -- pass a callback function that automatically receives the existing state as an input
-    setGoalsList((currentGoals) => [...currentGoals, {text: textInput, id: Math.random().toString()}]);
-    setTextInput("");
+    if(textInput.length > 0){
+      // setGoalsList([...goalsList, textInput]); // this works...
+      // but, recommended way of updating state if state updates depend on the previous state -- pass a callback function that automatically receives the existing state as an input
+      setGoalsList((currentGoals) => [...currentGoals, {text: textInput, id: Math.random().toString()}]);
+      setTextInput("");
+      setTextError("");
+
+    } else {
+      setTextError("Cannot add an empty goal!");
+      const errorMessageTimeOut = setTimeout(() => {
+        setTextError("");
+      }, 3000)
+    }
   };
 
   return (
     // main view
     <View style={styles.appContainer}>
       {/* view / div that holds the input and button */}
-      <View style={styles.inputContainer}>
-        <TextInput value={textInput} style={styles.textInput} placeholder="Your course goal!" onChangeText={handleInputChange}></TextInput>
-        <Button title="Add Goal" onPress={handlePress}></Button>
+      <View style={styles.inputView}>
+        <View style={styles.inputContainer}>
+          <TextInput value={textInput} style={styles.textInput} placeholder="Your course goal!" onChangeText={handleInputChange}></TextInput>
+          <Button title="Add Goal" onPress={handlePress}></Button>
+        </View>
+
+        {
+          textError && (
+            <View>
+              <Text style={styles.textError}>{textError}</Text>
+            </View>
+          )
+        }
       </View>
 
       {/* view / div that holds the list of goals */}
@@ -63,14 +83,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0a001a",
   },
 
-  inputContainer: {
+  inputView: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginTop: 24,
     marginBottom: 24,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc"
+  },
+
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   textInput: {
@@ -82,8 +105,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
 
+  textError: {
+    color: "#FF00FF",
+    marginTop: 20,
+  },
+
   goalsContainer: {
-    flex: 5,
+    flex: 8,
   },
 
   goalItem: {
