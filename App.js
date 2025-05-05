@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 
 //import components
 import { GoalItem } from './components/GoalItem';
@@ -25,7 +25,7 @@ export default function App() {
             </View>
           )
         }
-        
+
       </View>
 
       {/* view / div that holds the list of goals */}
@@ -36,7 +36,7 @@ export default function App() {
           data={goalsList} 
           renderItem={(itemData) => { //callback function passed to renderItem automatically receives an object as an input-- each object contains metadata & represents each element in goalsList array
           return (
-            <GoalItem goalItemData={itemData}></GoalItem> //property `item` on object contains our actual array element
+            <GoalItem goalItemData={itemData} setGoalsList={setGoalsList}></GoalItem> //property `item` on object contains our actual array element
           )
         }}
         //FlatList requires a key, similar to when we map through array elements
